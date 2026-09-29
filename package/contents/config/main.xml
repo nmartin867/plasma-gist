@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+                          http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+
+    <kcfgfile name=""/>
+
+    <group name="General">
+        <entry name="username" type="String">
+            <label>GitHub username whose public gists are listed.</label>
+            <default></default>
+        </entry>
+
+        <entry name="token" type="String">
+            <label>Personal access token. Required to list secret gists.</label>
+            <default></default>
+        </entry>
+
+        <entry name="listOwnGists" type="Bool">
+            <label>List the authenticated user's own gists (public + secret) instead of a username's public gists.</label>
+            <default>false</default>
+        </entry>
+
+        <entry name="maxGists" type="Int">
+            <label>Maximum number of gists to fetch per page.</label>
+            <default>30</default>
+        </entry>
+
+        <entry name="refreshInterval" type="Int">
+            <label>Minutes between automatic refreshes. 0 disables polling.</label>
+            <default>15</default>
+        </entry>
+
+        <entry name="showDescriptionTooltip" type="Bool">
+            <label>Show the full gist description in a tooltip.</label>
+            <default>true</default>
+        </entry>
+    </group>
+</kcfg>

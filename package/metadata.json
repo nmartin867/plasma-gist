@@ -1,0 +1,20 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "nmartin867@gmail.com",
+                "Name": "Nick Martin"
+            }
+        ],
+        "Category": "Online Services",
+        "Description": "Browse and open your GitHub gists from the panel or desktop",
+        "Icon": "text-x-generic",
+        "Id": "com.github.nmartin867.gists",
+        "License": "GPL-3.0-or-later",
+        "Name": "GitHub Gists",
+        "Version": "0.1.0",
+        "Website": "https://github.com/nmartin867/beavis-and-butthead-widget"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0"
+}

@@ -1,0 +1,5 @@
+build/
+*.plasmoid
+*.kate-swp
+.cache/
+.qmlls.ini

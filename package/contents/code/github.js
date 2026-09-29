@@ -1,0 +1,143 @@
+.pragma library
+
+/*
+ * Minimal GitHub Gists REST client.
+ *
+ * Kept as a `.pragma library` so it holds no QML context: every entry point
+ * takes an explicit options object and reports back through callbacks.
+ *
+ * API reference: https://docs.github.com/en/rest/gists/gists
+ */
+
+var API_ROOT = "https://api.github.com";
+var API_VERSION = "2022-11-28";
+var USER_AGENT = "plasma-gist-widget";
+
+/*
+ * Build the endpoint for the configured mode.
+ *
+ * opts: { listOwnGists, username, maxGists }
+ */
+function gistsUrl(opts) {
+    var perPage = Math.max(1, Math.min(100, opts.maxGists || 30));
+
+    if (opts.listOwnGists) {
+        return API_ROOT + "/gists?per_page=" + perPage;
+    }
+
+    if (!opts.username) {
+        return "";
+    }
+
+    return API_ROOT + "/users/" + encodeURIComponent(opts.username)
+        + "/gists?per_page=" + perPage;
+}
+
+/*
+ * Fetch gists.
+ *
+ * opts:      see gistsUrl(), plus optional `token`
+ * onSuccess: function(Array<gist>)  — normalised rows, see normalise()
+ * onError:   function(String message)
+ */
+function fetchGists(opts, onSuccess, onError) {
+    var url = gistsUrl(opts);
+
+    if (!url) {
+        onError(i18nFallback("Set a GitHub username in the widget settings."));
+        return;
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.setRequestHeader("Accept", "application/vnd.github+json");
+    xhr.setRequestHeader("X-GitHub-Api-Version", API_VERSION);
+    xhr.setRequestHeader("User-Agent", USER_AGENT);
+
+    if (opts.token) {
+        xhr.setRequestHeader("Authorization", "Bearer " + opts.token);
+    }
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState !== XMLHttpRequest.DONE) {
+            return;
+        }
+
+        if (xhr.status === 0) {
+            onError(i18nFallback("Could not reach api.github.com."));
+            return;
+        }
+
+        if (xhr.status !== 200) {
+            onError(errorMessage(xhr));
+            return;
+        }
+
+        var payload;
+        try {
+            payload = JSON.parse(xhr.responseText);
+        } catch (e) {
+            onError(i18nFallback("Malformed response from GitHub."));
+            return;
+        }
+
+        onSuccess(payload.map(normalise));
+    };
+
+    xhr.send();
+}
+
+/*
+ * Flatten a gist object into the fields the delegate renders.
+ */
+function normalise(gist) {
+    var filenames = Object.keys(gist.files || {});
+    var first = filenames.length > 0 ? gist.files[filenames[0]] : null;
+
+    return {
+        id: gist.id,
+        description: gist.description || "",
+        htmlUrl: gist.html_url,
+        isPublic: gist.public === true,
+        fileCount: filenames.length,
+        primaryFilename: first ? first.filename : "",
+        language: first && first.language ? first.language : "",
+        commentCount: gist.comments || 0,
+        createdAt: gist.created_at,
+        updatedAt: gist.updated_at
+    };
+}
+
+function errorMessage(xhr) {
+    var detail = "";
+    try {
+        detail = JSON.parse(xhr.responseText).message || "";
+    } catch (e) {
+        // Fall through to the bare status code.
+    }
+
+    switch (xhr.status) {
+    case 401:
+        return i18nFallback("GitHub rejected the token (401).");
+    case 403:
+        // 403 here is nearly always the unauthenticated 60 req/hour ceiling.
+        return detail.indexOf("rate limit") !== -1
+            ? i18nFallback("GitHub rate limit reached. Add a token or wait.")
+            : i18nFallback("GitHub refused the request (403).");
+    case 404:
+        return i18nFallback("No such GitHub user.");
+    default:
+        return detail !== ""
+            ? detail
+            : i18nFallback("GitHub returned HTTP ") + xhr.status;
+    }
+}
+
+/*
+ * i18n() is injected by the QML engine and is unavailable in a pragma library,
+ * so error strings pass through here and are translated at the call site when
+ * that matters. Kept as a seam rather than sprinkling raw literals.
+ */
+function i18nFallback(text) {
+    return text;
+}

@@ -88,6 +88,77 @@ function fetchGists(opts, onSuccess, onError) {
 }
 
 /*
+ * Fetch one gist with its file contents.
+ *
+ * The list endpoint omits `content`, so opening a gist always costs a second
+ * request. Files over 1 MB come back with `truncated: true` and a clipped
+ * body — the caller is expected to offer the web link in that case.
+ *
+ * onSuccess: function(gist)  — see normaliseDetail()
+ */
+function fetchGist(id, opts, onSuccess, onError) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", API_ROOT + "/gists/" + encodeURIComponent(id), true);
+    xhr.setRequestHeader("Accept", "application/vnd.github+json");
+    xhr.setRequestHeader("X-GitHub-Api-Version", API_VERSION);
+    xhr.setRequestHeader("User-Agent", USER_AGENT);
+
+    if (opts.token) {
+        xhr.setRequestHeader("Authorization", "Bearer " + opts.token);
+    }
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState !== XMLHttpRequest.DONE) {
+            return;
+        }
+
+        if (xhr.status === 0) {
+            onError(i18nFallback("Could not reach api.github.com."));
+            return;
+        }
+
+        if (xhr.status !== 200) {
+            onError(errorMessage(xhr));
+            return;
+        }
+
+        try {
+            onSuccess(normaliseDetail(JSON.parse(xhr.responseText)));
+        } catch (e) {
+            onError(i18nFallback("Malformed response from GitHub."));
+        }
+    };
+
+    xhr.send();
+}
+
+/*
+ * Like normalise(), but keeps every file and its body. `files` becomes an
+ * array so a Repeater can walk it; the API returns it keyed by filename.
+ */
+function normaliseDetail(gist) {
+    var files = Object.keys(gist.files || {}).map(function(key) {
+        var file = gist.files[key];
+        return {
+            filename: file.filename,
+            language: file.language || "",
+            size: file.size || 0,
+            content: file.content || "",
+            truncated: file.truncated === true,
+            rawUrl: file.raw_url || ""
+        };
+    });
+
+    return {
+        id: gist.id,
+        description: gist.description || "",
+        htmlUrl: gist.html_url,
+        isPublic: gist.public === true,
+        files: files
+    };
+}
+
+/*
  * Flatten a gist object into the fields the delegate renders.
  */
 function normalise(gist) {

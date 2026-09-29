@@ -17,6 +17,13 @@ PlasmoidItem {
     property string errorMessage: ""
     property date lastUpdated: new Date(0)
 
+    // Detail view. `selectedGist` is null until the second request lands, so
+    // `selectedGistId` is what decides which page the popup shows.
+    property string selectedGistId: ""
+    property var selectedGist: null
+    property bool detailLoading: false
+    property string detailError: ""
+
     switchWidth: Kirigami.Units.gridUnit * 14
     switchHeight: Kirigami.Units.gridUnit * 12
 
@@ -55,6 +62,7 @@ PlasmoidItem {
 
         loading = true;
         errorMessage = "";
+        closeGist();
 
         GitHub.fetchGists({
             listOwnGists: Plasmoid.configuration.listOwnGists,
@@ -73,6 +81,49 @@ PlasmoidItem {
             root.errorMessage = message;
             root.loading = false;
         });
+    }
+
+    /*
+     * Open a gist inside the popup. The list response carries no file bodies,
+     * so this always costs a second request; the id is set immediately so the
+     * view can switch and show its own spinner.
+     */
+    function openGist(id) {
+        selectedGistId = id;
+        selectedGist = null;
+        detailError = "";
+        detailLoading = true;
+
+        GitHub.fetchGist(id, {
+            token: Plasmoid.configuration.token
+        }, function(gist) {
+            // Ignore a response for a gist the user has already navigated away from.
+            if (root.selectedGistId !== gist.id) {
+                return;
+            }
+            root.selectedGist = gist;
+            root.detailLoading = false;
+        }, function(message) {
+            if (root.selectedGistId !== id) {
+                return;
+            }
+            root.detailError = message;
+            root.detailLoading = false;
+        });
+    }
+
+    function closeGist() {
+        selectedGistId = "";
+        selectedGist = null;
+        detailError = "";
+        detailLoading = false;
+    }
+
+    // Reopening the popup should land on the list, not on whatever was last read.
+    onExpandedChanged: {
+        if (!expanded) {
+            closeGist();
+        }
     }
 
     Timer {

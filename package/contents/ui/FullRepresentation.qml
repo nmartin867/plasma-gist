@@ -10,10 +10,14 @@ import org.kde.kirigami as Kirigami
 PlasmaExtras.Representation {
     id: full
 
-    Layout.minimumWidth: Kirigami.Units.gridUnit * 18
+    // Reading code in a narrow column is miserable, so the popup is wider
+    // than a typical plasmoid's.
+    Layout.minimumWidth: Kirigami.Units.gridUnit * 20
     Layout.minimumHeight: Kirigami.Units.gridUnit * 16
-    Layout.preferredWidth: Kirigami.Units.gridUnit * 24
-    Layout.preferredHeight: Kirigami.Units.gridUnit * 22
+    Layout.preferredWidth: Kirigami.Units.gridUnit * 30
+    Layout.preferredHeight: Kirigami.Units.gridUnit * 26
+
+    readonly property bool showingDetail: root.selectedGistId !== ""
 
     collapseMarginsHint: true
 
@@ -21,16 +25,53 @@ PlasmaExtras.Representation {
         contentItem: RowLayout {
             spacing: Kirigami.Units.smallSpacing
 
+            PlasmaComponents3.ToolButton {
+                visible: full.showingDetail
+                icon.name: "draw-arrow-back"
+                display: QQC2.AbstractButton.IconOnly
+                text: i18n("Back to list")
+                onClicked: root.closeGist()
+
+                PlasmaComponents3.ToolTip.text: text
+                PlasmaComponents3.ToolTip.visible: hovered
+                PlasmaComponents3.ToolTip.delay: Kirigami.Units.toolTipDelay
+            }
+
             PlasmaExtras.Heading {
                 Layout.fillWidth: true
                 level: 4
-                text: Plasmoid.configuration.listOwnGists
-                    ? i18n("My Gists")
-                    : i18n("Gists of %1", Plasmoid.configuration.username)
                 elide: Text.ElideRight
+                text: {
+                    if (full.showingDetail) {
+                        if (root.selectedGist === null) {
+                            return i18n("Loading…");
+                        }
+                        return root.selectedGist.description !== ""
+                            ? root.selectedGist.description
+                            : root.selectedGist.files[0].filename;
+                    }
+                    return Plasmoid.configuration.listOwnGists
+                        ? i18n("My Gists")
+                        : i18n("Gists of %1", Plasmoid.configuration.username);
+                }
             }
 
             PlasmaComponents3.ToolButton {
+                visible: full.showingDetail
+                icon.name: "internet-web-browser"
+                display: QQC2.AbstractButton.IconOnly
+                text: i18n("View on Web")
+                onClicked: Qt.openUrlExternally(root.selectedGist
+                    ? root.selectedGist.htmlUrl
+                    : "https://gist.github.com/" + root.selectedGistId)
+
+                PlasmaComponents3.ToolTip.text: text
+                PlasmaComponents3.ToolTip.visible: hovered
+                PlasmaComponents3.ToolTip.delay: Kirigami.Units.toolTipDelay
+            }
+
+            PlasmaComponents3.ToolButton {
+                visible: !full.showingDetail
                 icon.name: "view-refresh"
                 enabled: root.configured && !root.loading
                 display: QQC2.AbstractButton.IconOnly
@@ -43,6 +84,7 @@ PlasmaExtras.Representation {
             }
 
             PlasmaComponents3.ToolButton {
+                visible: !full.showingDetail
                 icon.name: "configure"
                 display: QQC2.AbstractButton.IconOnly
                 text: i18n("Configure…")
@@ -55,62 +97,68 @@ PlasmaExtras.Representation {
         }
     }
 
-    contentItem: PlasmaComponents3.ScrollView {
-        id: scrollView
-        contentWidth: availableWidth
+    contentItem: StackLayout {
+        currentIndex: full.showingDetail ? 1 : 0
 
-        ListView {
-            id: gistList
-            model: gistModel
-            clip: true
-            currentIndex: -1
-            reuseItems: true
-            boundsBehavior: Flickable.StopAtBounds
+        PlasmaComponents3.ScrollView {
+            id: scrollView
+            contentWidth: availableWidth
 
-            delegate: GistDelegate {
-                width: gistList.width
-            }
+            ListView {
+                id: gistList
+                model: gistModel
+                clip: true
+                currentIndex: -1
+                reuseItems: true
+                boundsBehavior: Flickable.StopAtBounds
 
-            // One placeholder covers every empty state: unconfigured, loading,
-            // request failed, or simply no gists on the account.
-            PlasmaExtras.PlaceholderMessage {
-                anchors.centerIn: parent
-                width: parent.width - (Kirigami.Units.gridUnit * 4)
-                visible: gistList.count === 0
-
-                iconName: {
-                    if (!root.configured) return "configure";
-                    if (root.errorMessage !== "") return "dialog-error";
-                    return "text-x-generic";
+                delegate: GistDelegate {
+                    width: gistList.width
                 }
-                text: {
-                    if (!root.configured) return i18n("Not configured");
-                    if (root.loading) return i18n("Loading…");
-                    if (root.errorMessage !== "") return i18n("Could not load gists");
-                    return i18n("No gists");
-                }
-                explanation: {
-                    if (!root.configured) {
-                        return Plasmoid.configuration.listOwnGists
-                            ? i18n("Add a personal access token to list your own gists.")
-                            : i18n("Set a GitHub username in the widget settings.");
+
+                // One placeholder covers every empty state: unconfigured,
+                // loading, request failed, or simply no gists on the account.
+                PlasmaExtras.PlaceholderMessage {
+                    anchors.centerIn: parent
+                    width: parent.width - (Kirigami.Units.gridUnit * 4)
+                    visible: gistList.count === 0
+
+                    iconName: {
+                        if (!root.configured) return "configure";
+                        if (root.errorMessage !== "") return "dialog-error";
+                        return "text-x-generic";
                     }
-                    return root.errorMessage;
-                }
+                    text: {
+                        if (!root.configured) return i18n("Not configured");
+                        if (root.loading) return i18n("Loading…");
+                        if (root.errorMessage !== "") return i18n("Could not load gists");
+                        return i18n("No gists");
+                    }
+                    explanation: {
+                        if (!root.configured) {
+                            return Plasmoid.configuration.listOwnGists
+                                ? i18n("Add a personal access token to list your own gists.")
+                                : i18n("Set a GitHub username in the widget settings.");
+                        }
+                        return root.errorMessage;
+                    }
 
-                helpfulAction: Kirigami.Action {
-                    visible: !root.configured
-                    icon.name: "configure"
-                    text: i18n("Configure…")
-                    onTriggered: Plasmoid.internalAction("configure").trigger()
+                    helpfulAction: Kirigami.Action {
+                        visible: !root.configured
+                        icon.name: "configure"
+                        text: i18n("Configure…")
+                        onTriggered: Plasmoid.internalAction("configure").trigger()
+                    }
                 }
             }
         }
+
+        GistDetail {}
     }
 
     footer: PlasmaExtras.PlasmoidHeading {
         position: PlasmaExtras.PlasmoidHeading.Position.Footer
-        visible: root.lastUpdated.getTime() > 0
+        visible: !full.showingDetail && root.lastUpdated.getTime() > 0
 
         contentItem: PlasmaComponents3.Label {
             horizontalAlignment: Text.AlignHCenter

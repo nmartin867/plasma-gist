@@ -17,7 +17,8 @@ PlasmaComponents3.ItemDelegate {
     hoverEnabled: true
     height: layout.implicitHeight + (Kirigami.Units.smallSpacing * 2)
 
-    onClicked: Qt.openUrlExternally(model.htmlUrl)
+    // Opens in the popup; the browser is one more click away, in the header.
+    onClicked: root.openGist(model.id)
 
     PlasmaComponents3.ToolTip.text: model.description
     PlasmaComponents3.ToolTip.visible: Plasmoid.configuration.showDescriptionTooltip
@@ -60,6 +61,18 @@ PlasmaComponents3.ItemDelegate {
                         : ""
                 ].filter(function(part) { return part !== ""; }).join(" · ")
             }
+        }
+
+        PlasmaComponents3.ToolButton {
+            visible: delegate.hovered
+            icon.name: "internet-web-browser"
+            text: i18n("View on Web")
+            display: QQC2.AbstractButton.IconOnly
+            onClicked: Qt.openUrlExternally(model.htmlUrl)
+
+            PlasmaComponents3.ToolTip.text: text
+            PlasmaComponents3.ToolTip.visible: hovered
+            PlasmaComponents3.ToolTip.delay: Kirigami.Units.toolTipDelay
         }
 
         PlasmaComponents3.ToolButton {

@@ -82,7 +82,7 @@ representation and the panel/desktop form factors you need `plasmoidviewer`
 from the `plasma-sdk` package:
 
 ```sh
-sudo pacman -S plasma-sdk
+sudo pacman -S plasma-sdk                 # already installed here
 plasmoidviewer -a package -f horizontal   # as if docked in a panel
 plasmoidviewer -a package -f planar       # as if on the desktop
 plasmoidviewer --help                     # form factors, locations, themes
@@ -190,11 +190,23 @@ limiting than a credential problem.
 /usr/lib/qt6/bin/qmllint -I /usr/lib/qt6/qml \
     package/contents/ui/*.qml package/contents/config/*.qml
 /usr/lib/qt6/bin/qmlformat -i package/contents/ui/*.qml
+npm install   # once; ESLint is the only node dependency and is dev-only
+npm run lint
 ```
 
 The `-I` is not optional: without it every Plasma and Kirigami import fails and
-the output is nothing but import errors. `qmllint` is the only automated check
-in the project — there is no test suite.
+the output is nothing but import errors. `qmllint` and `eslint` are the only
+automated checks in the project — there is no test suite.
+
+`eslint.config.mjs` covers `package/contents/code/*.js` only; ESLint cannot
+parse QML, so the JS embedded in `.qml` files is still reviewed by eye. The
+config enables `no-var` and `prefer-const` — the library uses `const`/`let`
+throughout — and preprocesses Qt's `.pragma`/`.import` directives, which are a
+syntax error to any standard JS parser, into same-length comments so reported
+line and column numbers (and `--fix`) still line up with the real file.
+
+`.editorconfig` carries the indentation the tools expect (4 spaces, LF), so
+editors agree with `.qmlformat.ini` instead of fighting it.
 
 `.qmllint.ini` disables `unqualified-access`. The representations legitimately
 reach for `root` and `gistModel` declared in `main.qml`, and the delegate reads

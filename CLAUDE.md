@@ -20,6 +20,10 @@ systemctl --user restart plasma-plasmashell
 /usr/lib/qt6/bin/qmllint -I /usr/lib/qt6/qml \
     package/contents/ui/*.qml package/contents/config/*.qml
 
+# Lint the plain JS under package/contents/code (ESLint; dev-only dependency,
+# `npm install` once). qmllint does not check var/let/const, ESLint does.
+npm run lint
+
 # Format
 /usr/lib/qt6/bin/qmlformat -i package/contents/ui/*.qml
 
@@ -30,7 +34,8 @@ journalctl --user -u plasma-plasmashell -f
 cmake -B build && cmake --build build && sudo cmake --install build
 ```
 
-There is no test suite. Verification is `qmllint` plus loading the widget.
+There is no test suite. Verification is `qmllint` + `npm run lint` plus loading
+the widget.
 
 ### Previewing without restarting the shell
 
@@ -39,7 +44,13 @@ already installed) runs the applet in its own window after `./install.sh` — mu
 faster than the install/restart loop, `console.log` goes to the terminal instead
 of the journal, and `-d` attaches a QML/JS debugger. It only renders the full
 representation; the compact one needs `plasmoidviewer -a package -f horizontal`
-from `plasma-sdk`, which is **not currently installed** on this machine.
+from `plasma-sdk`, which is installed.
+
+Screenshots: this is a KWin/Wayland session, so `grim` does not work — it needs
+the wlroots `wlr-screencopy` protocol. Use `spectacle -a -b -n -o out.png`,
+which goes through KWin's own `org.kde.KWin.ScreenShot2`. Note that `-a` grabs
+whatever window is *focused*, not the preview, and there is no way to target a
+window by title without `kdotool` (AUR).
 
 See the *Development* section of README.md for the rest: resetting settings,
 `QML_IMPORT_TRACE`, and reproducing the API request with curl.

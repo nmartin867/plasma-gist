@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Viewer source</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&amp;family=Noto+Sans+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#101214}
+a{color:#3daee9}a:hover{color:#7cc8f0}
+.ib{width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border:1px solid transparent;border-radius:4px;background:transparent;color:#fcfcfc;padding:0;cursor:pointer}
+.ib:hover{background:rgba(61,174,233,0.18);border-color:rgba(61,174,233,0.6)}
+.btn{height:32px;display:inline-flex;align-items:center;gap:6px;padding:0 12px;border-radius:4px;border:1px solid #4d5359;background:#31363b;color:#fcfcfc;font:inherit;font-size:13px;cursor:pointer}
+.btn:hover{border-color:#3daee9}
+.btn.primary{background:#1d6fa5;border-color:#3daee9}
+.field{height:32px;box-sizing:border-box;border-radius:4px;border:1px solid #4d5359;background:#141618;color:#fcfcfc;font:inherit;font-size:13px;padding:0 10px}
+.mono{font-family:'Noto Sans Mono',Hack,monospace}
+</style>
+</helmet>
+<div style="width: 560px; height: 560px; box-sizing: border-box; display: flex; flex-direction: column; background: #202326; color: #fcfcfc; font-family: 'Noto Sans', sans-serif; font-size: 13px; border: 1px solid #3a3f44; border-radius: 8px; overflow: hidden"><div style="display: flex; flex-direction: column; gap: 8px; padding: 8px 8px 8px 12px; background: #282c30; border-bottom: 1px solid #3a3f44"><div style="display: flex; align-items: center; gap: 4px"><button class="ib" type="button" aria-label="Back to list" title="Back to list" style=""><svg viewBox="0 0 24 24" aria-hidden="true" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; "><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg></button><h1 style="margin: 0; flex-grow: 1; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Arch post-install notes</h1><button class="ib" type="button" aria-label="Edit" title="Edit" style=""><svg viewBox="0 0 24 24" aria-hidden="true" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; "><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"></path></svg></button><button class="ib" type="button" aria-label="Copy contents" title="Copy contents" style=""><svg viewBox="0 0 24 24" aria-hidden="true" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; "><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button><button class="ib" type="button" aria-label="View on web" title="View on web" style=""><svg viewBox="0 0 24 24" aria-hidden="true" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; "><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></button></div><div style="display: flex; align-items: center; gap: 8px; margin-bottom: -8px"><div role="tablist" style="display: flex; gap: 2px; flex-grow: 1; min-width: 0"><button type="button" role="tab" aria-selected="true" style="height: 30px; display: flex; align-items: center; gap: 6px; padding: 0 10px; background: transparent; border: 0; color: #fcfcfc; border-bottom: 2px solid #3daee9; font: inherit; font-size: 12px; cursor: pointer"><svg viewBox="0 0 24 24" aria-hidden="true" style="width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; "><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>README.md</button><button type="button" role="tab" aria-selected="false" style="height: 30px; display: flex; align-items: center; gap: 6px; padding: 0 10px; background: transparent; border: 0; color: #a1a9b1; border-bottom: 2px solid transparent; font: inherit; font-size: 12px; cursor: pointer"><svg viewBox="0 0 24 24" aria-hidden="true" style="width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; "><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>setup.sh</button></div><div style="padding-bottom: 6px"><div role="group" style="display: flex; border: 1px solid #4d5359; border-radius: 4px; overflow: hidden; flex-shrink: 0"><button type="button" aria-pressed="false" style="height: 28px; display: flex; align-items: center; gap: 6px; padding: 0 10px; border: 0; background: #31363b; color: #fcfcfc;  font: inherit; font-size: 12px; cursor: pointer"><svg viewBox="0 0 24 24" aria-hidden="true" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; "><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>Rendered</button><button type="button" aria-pressed="true" style="height: 28px; display: flex; align-items: center; gap: 6px; padding: 0 10px; border: 0; background: #1d6fa5; color: #ffffff; border-left: 1px solid #4d5359; font: inherit; font-size: 12px; cursor: pointer"><svg viewBox="0 0 24 24" aria-hidden="true" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; "><path d="M16 18l6-6-6-6"></path><path d="M8 6l-6 6 6 6"></path></svg>Source</button></div></div></div></div><div style="flex-grow: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden"><div style="flex-grow: 1; overflow: hidden; display: flex; background: #141618; font-family: 'Noto Sans Mono', Hack, monospace; font-size: 12px; line-height: 19px; color: #cfcfc2"><pre aria-hidden="true" style="margin: 0; padding: 10px 10px 10px 12px; text-align: right; color: #5c6166; border-right: 1px solid #3a3f44; user-select: none">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre><div style="flex-grow: 1; padding: 10px 12px; white-space: pre"><div style=" min-height: 19px"><span style="color: #3daee9; font-weight: 600"># Arch post-install</span></div><div style=" min-height: 19px"></div><div style=" min-height: 19px">Everything I run on a fresh install before touching</div><div style=" min-height: 19px">dotfiles. Tested on Plasma 6.7.</div><div style=" min-height: 19px"></div><div style=" min-height: 19px"><span style="color: #3daee9; font-weight: 600">## Packages</span></div><div style=" min-height: 19px"></div><div style=" min-height: 19px"><span style="color: #7a7c7d">```sh</span></div><div style=" min-height: 19px"><span style="color: #fdbc4b">sudo</span> pacman -S --needed base-devel git plasma-sdk</div><div style=" min-height: 19px"><span style="color: #fdbc4b">paru</span> -S visual-studio-code-bin</div><div style=" min-height: 19px"><span style="color: #7a7c7d">```</span></div><div style=" min-height: 19px"></div><div style=" min-height: 19px"><span style="color: #3daee9; font-weight: 600">## Checklist</span></div><div style=" min-height: 19px"></div><div style=" min-height: 19px"><span style="color: #f67400">- [x]</span> Enable <span style="color: #27aeae">`fstrim.timer`</span></div><div style=" min-height: 19px"><span style="color: #f67400">- [x]</span> Set up zram</div><div style=" min-height: 19px"><span style="color: #f67400">- [ ]</span> Restore KWallet</div><div style=" min-height: 19px"></div><div style=" min-height: 19px"><span style="color: #a1a9b1; font-style: italic">&gt; Run <span style="color: #27aeae">`setup.sh`</span> after the first reboot, not before.</span></div></div></div></div><div style="display: flex; align-items: center; gap: 8px; min-height: 32px; padding: 0 12px; background: #282c30; border-top: 1px solid #3a3f44; font-size: 12px; color: #a1a9b1"><span>Markdown · 19 lines · UTF-8</span><span style="flex-grow: 1"></span><span>Select text to copy, or use the copy button above</span></div></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":560,"height":560}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

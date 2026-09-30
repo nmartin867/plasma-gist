@@ -1,0 +1,97 @@
+{
+ "v": 3,
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-09-30T03:31:00Z"
+ },
+ "title": "Gist Widget Mockups",
+ "launch": {
+  "view": "canvas"
+ },
+ "pages": [],
+ "boards": {
+  "Main.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 560,
+   "h": 520,
+   "title": "Gist list"
+  },
+  "Viewer-Rendered.dc.html": {
+   "x": 640,
+   "y": 0,
+   "w": 560,
+   "h": 560,
+   "title": "Viewer \u00b7 rendered Markdown"
+  },
+  "Viewer-Source.dc.html": {
+   "x": 1280,
+   "y": 0,
+   "w": 560,
+   "h": 560,
+   "title": "Viewer \u00b7 source"
+  },
+  "Edit.dc.html": {
+   "x": 1920,
+   "y": 0,
+   "w": 560,
+   "h": 560,
+   "title": "Inline editing"
+  },
+  "State-Setup.dc.html": {
+   "x": 0,
+   "y": 940,
+   "w": 560,
+   "h": 520,
+   "title": "First run \u00b7 not configured"
+  },
+  "State-Error.dc.html": {
+   "x": 640,
+   "y": 940,
+   "w": 560,
+   "h": 520,
+   "title": "Error \u00b7 stale list kept"
+  },
+  "Settings.dc.html": {
+   "x": 1280,
+   "y": 940,
+   "w": 680,
+   "h": 560,
+   "title": "Settings page"
+  },
+  "Panel.dc.html": {
+   "x": 2040,
+   "y": 940,
+   "w": 560,
+   "h": 300,
+   "title": "Panel icon and tooltip"
+  }
+ },
+ "order": [
+  "Main.dc.html",
+  "Viewer-Rendered.dc.html",
+  "Viewer-Source.dc.html",
+  "Edit.dc.html",
+  "State-Setup.dc.html",
+  "State-Error.dc.html",
+  "Settings.dc.html",
+  "Panel.dc.html"
+ ],
+ "notes": {
+  "flow": {
+   "x": 0,
+   "y": -260,
+   "text": "Browse, read, edit",
+   "kind": "title1",
+   "maxW": 2480
+  },
+  "states": {
+   "x": 0,
+   "y": 680,
+   "text": "States, settings and panel",
+   "kind": "title1",
+   "maxW": 2600
+  }
+ },
+ "designSystems": []
+}

@@ -1,0 +1,11 @@
+{
+    "name": "plasma-gist-widget",
+    "private": true,
+    "description": "Dev tooling only: ESLint for package/contents/code/*.js. The plasmoid itself has no build step and ships no node code.",
+    "scripts": {
+        "lint": "eslint ."
+    },
+    "devDependencies": {
+        "eslint": "^10.11.0"
+    }
+}

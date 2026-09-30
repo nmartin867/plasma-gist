@@ -71,7 +71,7 @@ PlasmoidItem {
             maxGists: Plasmoid.configuration.maxGists
         }, function(gists) {
             gistModel.clear();
-            for (var i = 0; i < gists.length; ++i) {
+            for (let i = 0; i < gists.length; ++i) {
                 gistModel.append(gists[i]);
             }
             root.lastUpdated = new Date();

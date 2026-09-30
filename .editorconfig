@@ -1,0 +1,20 @@
+# Shared editor settings. Qt Creator, Kate, VS Code and the JetBrains IDEs all
+# read this; it matches the IndentWidth in .qmlformat.ini so qmlformat and the
+# editor do not fight over QML files.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+max_line_length = 100
+
+[*.{md,markdown}]
+# Two trailing spaces are a hard line break in Markdown.
+trim_trailing_whitespace = false
+
+[*.{yml,yaml}]
+indent_size = 2

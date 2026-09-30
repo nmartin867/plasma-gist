@@ -3,3 +3,5 @@ build/
 *.kate-swp
 .cache/
 .qmlls.ini
+node_modules/
+.idea/

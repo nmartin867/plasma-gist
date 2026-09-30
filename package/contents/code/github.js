@@ -9,9 +9,9 @@
  * API reference: https://docs.github.com/en/rest/gists/gists
  */
 
-var API_ROOT = "https://api.github.com";
-var API_VERSION = "2022-11-28";
-var USER_AGENT = "plasma-gist-widget";
+const API_ROOT = "https://api.github.com";
+const API_VERSION = "2022-11-28";
+const USER_AGENT = "plasma-gist-widget";
 
 /*
  * Build the endpoint for the configured mode.
@@ -19,7 +19,7 @@ var USER_AGENT = "plasma-gist-widget";
  * opts: { listOwnGists, username, maxGists }
  */
 function gistsUrl(opts) {
-    var perPage = Math.max(1, Math.min(100, opts.maxGists || 30));
+    const perPage = Math.max(1, Math.min(100, opts.maxGists || 30));
 
     if (opts.listOwnGists) {
         return API_ROOT + "/gists?per_page=" + perPage;
@@ -41,14 +41,14 @@ function gistsUrl(opts) {
  * onError:   function(String message)
  */
 function fetchGists(opts, onSuccess, onError) {
-    var url = gistsUrl(opts);
+    const url = gistsUrl(opts);
 
     if (!url) {
         onError(i18nFallback("Set a GitHub username in the widget settings."));
         return;
     }
 
-    var xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
     xhr.setRequestHeader("Accept", "application/vnd.github+json");
     xhr.setRequestHeader("X-GitHub-Api-Version", API_VERSION);
@@ -73,7 +73,7 @@ function fetchGists(opts, onSuccess, onError) {
             return;
         }
 
-        var payload;
+        let payload;
         try {
             payload = JSON.parse(xhr.responseText);
         } catch (e) {
@@ -97,7 +97,7 @@ function fetchGists(opts, onSuccess, onError) {
  * onSuccess: function(gist)  — see normaliseDetail()
  */
 function fetchGist(id, opts, onSuccess, onError) {
-    var xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
     xhr.open("GET", API_ROOT + "/gists/" + encodeURIComponent(id), true);
     xhr.setRequestHeader("Accept", "application/vnd.github+json");
     xhr.setRequestHeader("X-GitHub-Api-Version", API_VERSION);
@@ -137,8 +137,8 @@ function fetchGist(id, opts, onSuccess, onError) {
  * array so a Repeater can walk it; the API returns it keyed by filename.
  */
 function normaliseDetail(gist) {
-    var files = Object.keys(gist.files || {}).map(function(key) {
-        var file = gist.files[key];
+    const files = Object.keys(gist.files || {}).map(function(key) {
+        const file = gist.files[key];
         return {
             filename: file.filename,
             language: file.language || "",
@@ -162,8 +162,8 @@ function normaliseDetail(gist) {
  * Flatten a gist object into the fields the delegate renders.
  */
 function normalise(gist) {
-    var filenames = Object.keys(gist.files || {});
-    var first = filenames.length > 0 ? gist.files[filenames[0]] : null;
+    const filenames = Object.keys(gist.files || {});
+    const first = filenames.length > 0 ? gist.files[filenames[0]] : null;
 
     return {
         id: gist.id,
@@ -180,7 +180,7 @@ function normalise(gist) {
 }
 
 function errorMessage(xhr) {
-    var detail = "";
+    let detail = "";
     try {
         detail = JSON.parse(xhr.responseText).message || "";
     } catch (e) {

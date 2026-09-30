@@ -9,7 +9,7 @@
         ],
         "Category": "Online Services",
         "Description": "Browse and open your GitHub gists from the panel or desktop",
-        "Icon": "text-x-generic",
+        "Icon": "com.github.nmartin867.gists",
         "Id": "com.github.nmartin867.gists",
         "License": "GPL-3.0-or-later",
         "Name": "GitHub Gists",

@@ -27,7 +27,7 @@ PlasmoidItem {
     switchWidth: Kirigami.Units.gridUnit * 14
     switchHeight: Kirigami.Units.gridUnit * 12
 
-    Plasmoid.icon: "text-x-generic"
+    Plasmoid.icon: "com.github.nmartin867.gists"
     Plasmoid.status: errorMessage !== ""
         ? PlasmaCore.Types.NeedsAttentionStatus
         : PlasmaCore.Types.PassiveStatus

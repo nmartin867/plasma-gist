@@ -15,3 +15,8 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 find_package(Plasma ${KF6_MIN_VERSION} REQUIRED)
 
 plasma_install_package(package com.github.nmartin867.gists)
+
+# Also install the applet icon into the system icon theme. The copy inside the
+# package is the source of truth; KIconLoader only ever finds this one.
+install(DIRECTORY package/contents/icons/hicolor
+        DESTINATION ${KDE_INSTALL_ICONDIR})

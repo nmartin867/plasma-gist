@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22">
+  <defs>
+    <style type="text/css" id="current-color-scheme">
+      .ColorScheme-Text {
+        color:#232629;
+      }
+    </style>
+  </defs>
+  <!--
+    A gist: a snippet page with a clipped corner and three code lines knocked
+    out of the silhouette. One even-odd path, filled with currentColor and
+    tagged .ColorScheme-Text, so KIconLoader recolours it against the active
+    colour scheme exactly like the Breeze symbolic icons do. Laid out on
+    Breeze's 22px grid: every edge is on a whole pixel and the bars are 2px
+    with 2px gutters, so it stays crisp at 22px and at any 2x multiple.
+  -->
+  <path
+      style="fill:currentColor;fill-opacity:1;stroke:none"
+      fill-rule="evenodd"
+      class="ColorScheme-Text"
+      d="M 4 2 H 13 L 18 7 V 20 H 4 Z
+         M 7 7 H 15 V 9 H 7 Z
+         M 7 11 H 14 V 13 H 7 Z
+         M 7 15 H 12 V 17 H 7 Z" />
+</svg>

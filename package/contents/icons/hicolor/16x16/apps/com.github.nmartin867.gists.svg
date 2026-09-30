@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <defs>
+    <style type="text/css" id="current-color-scheme">
+      .ColorScheme-Text {
+        color:#232629;
+      }
+    </style>
+  </defs>
+  <!--
+    The 16px cut of the gist icon. Same silhouette, redrawn rather than
+    scaled: at 16px the 22px grid puts the bars on 1.45px and they grey out,
+    so this drops to two 2px bars on whole-pixel edges. Breeze ships separate
+    small cuts for the same reason.
+  -->
+  <path
+      style="fill:currentColor;fill-opacity:1;stroke:none"
+      fill-rule="evenodd"
+      class="ColorScheme-Text"
+      d="M 3 1 H 10 L 13 4 V 15 H 3 Z
+         M 5 6 H 11 V 8 H 5 Z
+         M 5 10 H 9 V 12 H 5 Z" />
+</svg>
